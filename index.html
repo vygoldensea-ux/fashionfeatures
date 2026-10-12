@@ -1,0 +1,28 @@
+<!doctype html>
+<html lang="vi">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover,user-scalable=no">
+<title>Soft Body</title>
+<link rel="stylesheet" href="styles.css">
+<script type="importmap">{ "imports": { "three": "./vendor/three.module.min.js", "three/addons/": "./vendor/addons/" } }</script>
+</head>
+<body>
+<div id="app">
+  <div id="view"><canvas id="c"></canvas><div id="chars"></div><div id="loading">Đang tải…</div><div id="hint">1 ngón xoay / 2 ngón trượt và zoom / chạm ngực hoặc mông để bóp</div></div>
+  <div id="hud">
+    <div class="row" id="cams">
+      <button data-cam="portrait" class="on">Chân dung</button>
+      <button data-cam="half">Nửa người</button>
+      <button data-cam="full">Toàn thân</button>
+      <button data-cam="side">Nghiêng</button>
+      <button data-cam="back">Phía sau</button>
+    </div>
+    <label>Ngực <input id="size" type="range" min="0.6" max="1.5" step="0.01" value="1"><output for="size">1.00</output></label>
+    <label>Mông <input id="hip" type="range" min="0.6" max="1.5" step="0.01" value="1"><output for="hip">1.00</output></label>
+    <label>Độ mềm <input id="soft" type="range" min="0" max="1" step="0.01" value="0.6"><output for="soft">0.60</output></label>
+  </div>
+</div>
+<script type="module" src="src/main.js"></script>
+</body>
+</html>

@@ -1,0 +1,20 @@
+<!doctype html><meta charset="utf-8"><style>html,body{margin:0;background:#000}</style>
+<script type="importmap">{ "imports": { "three": "./vendor/three.module.min.js", "three/addons/": "./vendor/addons/" } }</script>
+<script type="module">
+import * as THREE from 'three';
+import { GLTFLoader } from 'three/addons/loaders/GLTFLoader.js';
+const r = new THREE.WebGLRenderer({ antialias: true, preserveDrawingBuffer: true }); r.setSize(900, 900); r.outputColorSpace = THREE.SRGBColorSpace; document.body.appendChild(r.domElement);
+const s = new THREE.Scene(); s.add(new THREE.HemisphereLight(0xffffff, 0x333333, 2.5)); const d = new THREE.DirectionalLight(0xffffff, 1.5); d.position.set(1, 2, 3); s.add(d);
+const cam = new THREE.PerspectiveCamera(30, 1, 0.01, 100);
+const g = await new GLTFLoader().loadAsync('' + (new URLSearchParams(location.search).get('m') || 'assets/rigged.glb') + ''); s.add(g.scene);
+if (new URLSearchParams(location.search).get('hairdbg')) g.scene.traverse((o) => { if (o.isMesh) { o.material = new THREE.ShaderMaterial({ vertexShader: 'attribute float _hair; varying float vH; void main(){ vH=_hair; gl_Position = projectionMatrix * modelViewMatrix * vec4(position,1.0); }', fragmentShader: 'varying float vH; void main(){ gl_FragColor = vH > 0.5 ? vec4(0.6,0.1,0.9,1.0) : vec4(1.0,0.9,0.8,1.0); }' }); if (o.isSkinnedMesh) { o.material.skinning = true; } } });
+if (new URLSearchParams(location.search).get('unlit')) g.scene.traverse((o) => { if (o.isMesh) { const m = new THREE.MeshBasicMaterial({ map: o.material.map }); o.material = m; } });
+const B = (n) => g.scene.getObjectByName(n);
+const rest = {}; g.scene.traverse((o) => o.isBone && (rest[o.name] = o.quaternion.clone()));
+window.pose = (p) => { for (const [n, q] of Object.entries(rest)) B(n).quaternion.copy(q); for (const [n, e] of Object.entries(p)) B(n).quaternion.multiply(new THREE.Quaternion().setFromEuler(new THREE.Euler(...e))); };
+window.shot = (az = 0) => { cam.position.set(Math.sin(az) * 4.6, 1.0, Math.cos(az) * 4.6); cam.lookAt(0, 0.9, 0); r.render(s, cam); return r.domElement.toDataURL('image/jpeg', 0.85); };
+window.bones = Object.keys(rest);
+window.shot2 = (az, y, dist, ty) => { cam.position.set(Math.sin(az) * dist, y, Math.cos(az) * dist); cam.lookAt(0, ty, 0); r.render(s, cam); return r.domElement.toDataURL('image/jpeg', 0.9); };
+window.__pick = (px, py) => { const rc = new THREE.Raycaster(); rc.setFromCamera(new THREE.Vector2(px / 450 - 1, 1 - py / 450), cam); const h = rc.intersectObject(g.scene, true); return h.length ? [h[0].faceIndex, h[0].point.x, h[0].point.y, h[0].point.z] : null; };
+window.ready = true;
+</script>

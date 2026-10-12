@@ -1,0 +1,14 @@
+<!doctype html><meta charset="utf-8"><style>html,body{margin:0;background:#888}canvas{display:block}</style>
+<script type="importmap">{ "imports": { "three": "./vendor/three.module.min.js", "three/addons/": "./vendor/addons/" } }</script>
+<script type="module">
+import * as THREE from 'three';
+import { GLTFLoader } from 'three/addons/loaders/GLTFLoader.js';
+const r = new THREE.WebGLRenderer({ antialias: true, preserveDrawingBuffer: true }); r.setSize(1200, 900); r.outputColorSpace = THREE.SRGBColorSpace; document.body.appendChild(r.domElement);
+const s = new THREE.Scene(); s.background = new THREE.Color(0x9a9aa0);
+s.add(new THREE.HemisphereLight(0xffffff, 0x666666, 2.2)); const d = new THREE.DirectionalLight(0xffffff, 1.5); d.position.set(1, 2, 3); s.add(d);
+const cam = new THREE.PerspectiveCamera(30, 4 / 3, 0.01, 100);
+const g = await new GLTFLoader().loadAsync('' + (new URLSearchParams(location.search).get('m') || 'incoming/anime_hong.glb') + '');
+s.add(g.scene);
+window.shot = (az, y, dist, ty) => { cam.position.set(Math.sin(az) * dist, y, Math.cos(az) * dist); cam.lookAt(0, ty, 0); r.render(s, cam); return r.domElement.toDataURL('image/jpeg', 0.85); };
+window.ready = true;
+</script>

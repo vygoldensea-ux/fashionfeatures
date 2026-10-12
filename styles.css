@@ -1,0 +1,28 @@
+/* Character Studio: zinc neutrals, one accent (gold), hairlines instead of boxes */
+:root { --bg: #000; --panel: #0c0c0f; --line: rgba(255,255,255,.1); --text: #ededf0; --muted: #8a8a93; --accent: #f5a623; --mono: ui-monospace, "SF Mono", Menlo, Consolas, monospace; --sans: -apple-system, "SF Pro Text", "Segoe UI", Roboto, sans-serif; }
+html, body { margin: 0; height: 100%; overflow: hidden; background: var(--bg); color: var(--text); font-family: var(--sans); overscroll-behavior: none; user-select: none; -webkit-user-select: none; -webkit-font-smoothing: antialiased; }
+/* a phone screen (9:16), centred; on a computer it is a phone-shaped frame in the black */
+#app { position: fixed; left: 50%; top: 50%; transform: translate(-50%, -50%); width: min(100vw, 100dvh * 9 / 16); height: min(100dvh, 100vw * 16 / 9); display: flex; flex-direction: column; background: var(--bg); overflow: hidden; }
+/* the picture: a 3:4 portrait on top */
+#view { position: relative; width: 100%; aspect-ratio: 3 / 4; flex: none; }
+#c { position: absolute; inset: 0; width: 100%; height: 100%; display: block; touch-action: none; }
+#loading { position: absolute; inset: 0; display: grid; place-items: center; font: 500 11px/1 var(--mono); letter-spacing: .14em; text-transform: uppercase; color: var(--muted); }
+#loading.hidden { display: none; }
+#hint { position: absolute; left: 14px; right: 14px; bottom: 10px; font: 400 10px/1.4 var(--mono); letter-spacing: .03em; color: rgba(255,255,255,.36); pointer-events: none; }
+/* character tabs: plain text, the active one carries the accent underline */
+#chars { position: absolute; left: 14px; top: 12px; display: flex; gap: 18px; z-index: 2; }
+#chars button { padding: 6px 0 7px; border: 0; border-bottom: 1.5px solid transparent; border-radius: 0; background: none; color: var(--muted); font: 600 12px/1 var(--sans); letter-spacing: .02em; cursor: pointer; }
+#chars button.on { color: var(--text); border-bottom-color: var(--accent); }
+/* controls */
+#hud { flex: 1; min-height: 0; padding: 10px 14px calc(10px + env(safe-area-inset-bottom)); display: flex; flex-direction: column; justify-content: center; gap: 12px; background: var(--panel); border-top: 1px solid var(--line); }
+.row { display: flex; border: 1px solid var(--line); border-radius: 8px; overflow: hidden; }
+.row button { flex: 1; min-width: 0; padding: 9px 2px; border: 0; border-right: 1px solid var(--line); background: transparent; color: var(--muted); font: 600 11px/1 var(--sans); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; cursor: pointer; }
+.row button:last-child { border-right: 0; }
+.row button.on { background: rgba(255,255,255,.08); color: var(--text); }
+#hud label { display: grid; grid-template-columns: 58px 1fr 34px; align-items: center; gap: 10px; font: 500 11.5px/1 var(--sans); color: var(--muted); }
+#hud label output { font: 500 11px/1 var(--mono); color: var(--text); text-align: right; }
+#hud input[type=range] { -webkit-appearance: none; appearance: none; width: 100%; height: 22px; margin: 0; background: transparent; }
+#hud input[type=range]::-webkit-slider-runnable-track { height: 2px; background: rgba(255,255,255,.16); border-radius: 1px; }
+#hud input[type=range]::-moz-range-track { height: 2px; background: rgba(255,255,255,.16); border-radius: 1px; }
+#hud input[type=range]::-webkit-slider-thumb { -webkit-appearance: none; width: 16px; height: 16px; margin-top: -7px; border-radius: 50%; background: var(--accent); border: 3px solid var(--panel); box-shadow: 0 0 0 1px rgba(255,255,255,.2); }
+#hud input[type=range]::-moz-range-thumb { width: 10px; height: 10px; border-radius: 50%; background: var(--accent); border: 3px solid var(--panel); box-shadow: 0 0 0 1px rgba(255,255,255,.2); }
